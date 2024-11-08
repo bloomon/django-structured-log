@@ -1,7 +1,9 @@
 import threading
-import django.utils.log
-from .wsgi import get_wsgi_application
 
+import django.utils.log
+from django.http import HttpRequest, HttpResponse
+
+from .wsgi import get_wsgi_application
 
 local = threading.local()
 
@@ -12,13 +14,13 @@ __all__ = ["local", "get_wsgi_application"]
 def log_response_cor(
     message,
     *args,
-    response=None,
-    request=None,
+    response: HttpResponse | None = None,
+    request: HttpRequest | None = None,
+    exception: Exception | None = None,
     logger=django.utils.log.request_logger,
     level=None,
-    exc_info=None
-):
-
+) -> None:
+    
     if getattr(response, "_has_been_logged", False):
         return
 
@@ -29,6 +31,11 @@ def log_response_cor(
             level = "warning"
         else:
             level = "info"
+
+    if exception is not None:
+        exc_info = (type(exception), exception, exception.__traceback__)
+    else:
+        exc_info = None
 
     getattr(logger, level)(
         message,
