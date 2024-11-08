@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="structured_log",
-    version="0.1.1",
+    version="0.1.2",
     author="Gregory Zhizhilkin",
     author_email="gregory@stopdesign.ru",
     description="Google Cloud structured log formater for Django",
